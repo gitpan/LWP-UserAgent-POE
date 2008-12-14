@@ -5,7 +5,7 @@ package LWP::UserAgent::POE;
 use strict;
 use warnings;
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 use base "LWP::UserAgent";
 
 use warnings;
@@ -22,9 +22,13 @@ sub new {
 ###########################################
     my ($class, %options) = @_;
 
+    my $default_options = LWP::UserAgent->new();
+    delete $default_options->{proxy};
+
     my $self = bless {
         await_id => 0,
         poco_alias => "lwp_useragent_poe_http_client_poco",
+        %$default_options,
         %options,
     }, $class;
 
@@ -124,6 +128,8 @@ sub simple_request {
     my ($self, $request) = @_;
 
     INFO "Received request ", $request->url();
+
+    $self->prepare_request( $request );
 
     my $promise = \my $scalar;
     $poe_kernel->post("$self", on_request => $request, $promise);

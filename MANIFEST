@@ -7,4 +7,5 @@ MANIFEST.SKIP
 POE.pm
 README
 t/001Basic.t
+t/lwp_useragent_compat.t
 META.yml                                 Module meta-data (added by MakeMaker)
